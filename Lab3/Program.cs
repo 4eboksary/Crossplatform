@@ -109,18 +109,19 @@ class Program
         }
     }
 
-    static void WriteOutput(string result, char[,] a = null, Pos startPos = null, int dstI = 0, int dstJ = 0, int[,] len = null)
+    static void WriteOutput(string outputFilePath, string result, char[,] a = null, Pos startPos = null, int dstI = 0, int dstJ = 0, int[,] len = null)
     {
-        using (StreamWriter writer = new StreamWriter("C:\\Users\\pushkaruk\\Documents\\GitHub\\Crossplatform\\Lab3\\OUTPUT.TXT"))
+        using (StreamWriter writer = new StreamWriter(outputFilePath))
         {
             if (result == "N")
             {
                 writer.WriteLine("N");
                 return;
             }
+
             writer.WriteLine("Y");
 
-            // Backtrack to find the path
+            // Відновлення шляху
             Pos curPos = new Pos(dstI, dstJ);
             while (curPos.i != startPos.i || curPos.j != startPos.j)
             {
@@ -135,7 +136,7 @@ class Program
                             int ni = curPos.i + di;
                             int nj = curPos.j + dj;
 
-                            if (len[ni, nj] == len[curPos.i, curPos.j] - 1)
+                            if (ni > 0 && ni < len.GetLength(0) && nj > 0 && nj < len.GetLength(1) && len[ni, nj] == len[curPos.i, curPos.j] - 1)
                             {
                                 curPos = new Pos(ni, nj);
                                 break;
@@ -145,18 +146,19 @@ class Program
                 }
             }
 
-            // Mark the starting point
+            // Позначення стартової і кінцевої точок
             a[startPos.i, startPos.j] = '+';
             a[dstI, dstJ] = 'X';
 
-            // Output the modified grid
-            for (int i = 1; i <= a.GetLength(0) - 2; i++)
+            // Виведення оновленої сітки без зайвих пробілів та рядків
+            for (int i = 1; i <= len.GetLength(0) - 2; i++)
             {
-                for (int j = 1; j <= a.GetLength(1) - 2; j++)
+                for (int j = 1; j <= len.GetLength(1) - 2; j++)
                 {
                     writer.Write(a[i, j]);
                 }
-                writer.WriteLine();
+                if (i != len.GetLength(0) - 2) // Не додаємо новий рядок після останнього рядка
+                    writer.WriteLine();
             }
         }
     }

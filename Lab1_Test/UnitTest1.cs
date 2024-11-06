@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
 using Xunit;
+using Lab1;
 
-namespace Lab1.Tests
+namespace Lab1_Test
 {
     public class ProgramTests
     {
@@ -90,4 +93,4 @@ namespace Lab1.Tests
             Assert.Equal(1699, result); // Перший гравець отримує перевагу
         }
     }
-}
+ }
