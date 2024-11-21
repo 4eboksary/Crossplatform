@@ -1,7 +1,7 @@
 using Xunit;
-using module_app;
+using Lab1;
 
-namespace module_app.Tests
+namespace Lab1_Tests
 {
     public class ProgramTests
     {

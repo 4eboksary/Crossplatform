@@ -1,149 +1,103 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-
-class Pos
-{
-    public int i;
-    public int j;
-
-    public Pos(int i, int j)
-    {
-        this.i = i;
-        this.j = j;
-    }
-}
 
 class Program
 {
     static void Main()
     {
-        const int UNDEF = -1;
-        string[] input = File.ReadAllLines("C:\\Users\\pushkaruk\\Documents\\GitHub\\Crossplatform\\Lab3\\INPUT.TXT");
-        int n = int.Parse(input[0]);
-        char[,] a = new char[n + 2, n + 2];
-        int[,] len = new int[n + 2, n + 2];
-        Queue<Pos> q = new Queue<Pos>();
-        int dstI = UNDEF, dstJ = UNDEF;
-        Pos startPos = null;
-
-        for (int i = 1; i <= n; i++)
+        try
         {
-            string line = input[i];
-            for (int j = 1; j <= n; j++)
+            string inputPath = Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "Lab3", "INPUT.txt").Trim();
+            string outputPath = Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "Lab3", "OUTPUT.txt").Trim();
+
+            // Зчитуємо вхідні дані
+            var input = File.ReadAllLines(inputPath);
+
+            if (input.Length == 0)
             {
-                a[i, j] = line[j - 1];
-
-                if (a[i, j] == 'X')
-                {
-                    dstI = i;
-                    dstJ = j;
-                }
-                else if (a[i, j] == '@')
-                {
-                    q.Enqueue(new Pos(i, j));
-                    len[i, j] = 0;
-                    startPos = new Pos(i, j);
-                }
-                else
-                {
-                    len[i, j] = UNDEF;
-                }
-            }
-        }
-
-        if (startPos == null || dstI == UNDEF || dstJ == UNDEF)
-        {
-            WriteOutput("N");
-            return;
-        }
-
-        bool pathFound = false;
-        while (q.Count > 0)
-        {
-            Pos cur = q.Dequeue();
-            for (int di = -1; di <= 1; di++)
-            {
-                for (int dj = -1; dj <= 1; dj++)
-                {
-                    if (Math.Abs(di) + Math.Abs(dj) == 1)
-                    {
-                        int ni = cur.i + di;
-                        int nj = cur.j + dj;
-
-                        if (ni > 0 && ni <= n && nj > 0 && nj <= n && a[ni, nj] != 'O' && len[ni, nj] == UNDEF)
-                        {
-                            len[ni, nj] = len[cur.i, cur.j] + 1;
-                            q.Enqueue(new Pos(ni, nj));
-
-                            if (ni == dstI && nj == dstJ)
-                            {
-                                pathFound = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-                if (pathFound) break;
-            }
-            if (pathFound) break;
-        }
-        if (!pathFound)
-        {
-            WriteOutput("N");
-        }
-        else
-        {
-            WriteOutput("Y", a, startPos, dstI, dstJ, len);
-        }
-    }
-
-    static void WriteOutput(string outputFilePath, string result, char[,] a = null, Pos startPos = null, int dstI = 0, int dstJ = 0, int[,] len = null)
-    {
-        using (StreamWriter writer = new StreamWriter(outputFilePath))
-        {
-            if (result == "N")
-            {
-                writer.WriteLine("N");
+                Console.WriteLine("Файл порожній.");
                 return;
             }
-            writer.WriteLine("Y");
-            Pos curPos = new Pos(dstI, dstJ);
-            while (curPos.i != startPos.i || curPos.j != startPos.j)
-            {
-                a[curPos.i, curPos.j] = '+';
 
-                for (int di = -1; di <= 1; di++)
+            if (!int.TryParse(input[0], out int n))
+            {
+                Console.WriteLine("Перший рядок не є дійсним числом.");
+                return;
+            }
+
+            char[,] grid = new char[n, n];
+            (int x, int y) start = (-1, -1), end = (-1, -1);
+
+            // Заповнюємо сітку і визначаємо стартову та кінцеву точки
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
                 {
-                    for (int dj = -1; dj <= 1; dj++)
+                    grid[i, j] = input[i + 1][j];
+                    if (grid[i, j] == '@') start = (i, j);
+                    if (grid[i, j] == 'X') end = (i, j);
+                }
+            }
+
+            bool[,] visited = new bool[n, n];  // Мітки відвідуваних клітин
+            int[,] directions = { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 } }; // Напрями руху (право, вниз, вліво, вгору)
+            Queue<(int x, int y, List<(int x, int y)> path)> queue = new();
+            queue.Enqueue((start.x, start.y, new List<(int x, int y)> { start }));
+            visited[start.x, start.y] = true;
+
+            // Алгоритм пошуку в ширину
+            while (queue.Count > 0)
+            {
+                var (currentX, currentY, path) = queue.Dequeue();
+
+                if ((currentX, currentY) == end)
+                {
+                    // Якщо досягли кінцевої точки, позначаємо шлях
+                    foreach (var (x, y) in path)
                     {
-                        if (Math.Abs(di) + Math.Abs(dj) == 1)
-                        {
-                            int ni = curPos.i + di;
-                            int nj = curPos.j + dj;
-                            if (ni > 0 && ni < len.GetLength(0) && nj > 0 && nj < len.GetLength(1) && len[ni, nj] == len[curPos.i, curPos.j] - 1)
-                            {
-                                curPos = new Pos(ni, nj);
-                                break;
-                            }
-                        }
+                        if (grid[x, y] == '.')
+                            grid[x, y] = '+';  // Маркуємо шлях
+                    }
+                    grid[start.x, start.y] = '@'; // Стартова точка
+                    grid[end.x, end.y] = 'X'; // Кінцева точка
+
+                    File.WriteAllText(outputPath, "Y\n"); // Записуємо результат в файл
+                    for (int i = 0; i < n; i++)
+                    {
+                        for (int j = 0; j < n; j++)
+                            File.AppendAllText(outputPath, grid[i, j].ToString());
+                        File.AppendAllText(outputPath, "\n");
+                    }
+                    return;
+                }
+
+                // Перевірка всіх можливих напрямків
+                for (int i = 0; i < directions.GetLength(0); i++)
+                {
+                    int dx = directions[i, 0];
+                    int dy = directions[i, 1];
+
+                    int newX = currentX + dx;
+                    int newY = currentY + dy;
+
+                    // Перевірка, чи можемо йти в нову клітину
+                    if (newX >= 0 && newX < n && newY >= 0 && newY < n &&
+                        !visited[newX, newY] && grid[newX, newY] != 'O') // 'O' - непрохідна клітина
+                    {
+                        visited[newX, newY] = true;
+                        var newPath = new List<(int x, int y)>(path) { (newX, newY) };
+                        queue.Enqueue((newX, newY, newPath));
                     }
                 }
             }
 
-            a[startPos.i, startPos.j] = '+';
-            a[dstI, dstJ] = 'X';
-
-            for (int i = 1; i <= len.GetLength(0) - 2; i++)
-            {
-                for (int j = 1; j <= len.GetLength(1) - 2; j++)
-                {
-                    writer.Write(a[i, j]);
-                }
-                if (i != len.GetLength(0) - 2)
-                    writer.WriteLine();
-            }
+            // Якщо шлях не знайдено
+            File.WriteAllText(outputPath, "N");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Сталася помилка: {ex.Message}");
         }
     }
 }
