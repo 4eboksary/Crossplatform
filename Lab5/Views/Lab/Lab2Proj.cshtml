@@ -1,0 +1,30 @@
+﻿﻿@{
+    ViewData["Title"] = "Lab 2";
+}
+
+<h1 class="mb-4">Lab 2</h1>
+
+<link rel="stylesheet" href="~/css/Lab.css" asp-append-version="true" />
+
+<p> The number of possible valid lines of length N is calculated using dynamic programming.</p>
+
+<form asp-action="Lab2Result" method="post" class="p-3 border rounded bg-light">
+    <div class="form-group mb-3">
+        <label for="userInput" class="form-label">Enter N (number of digits):</label>
+        <input type="text" id="userInput" name="userInput" class="form-control" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger mt-3">
+        <strong>Error:</strong> @ViewBag.Error
+    </div>
+}
+else if (ViewBag.Result != null)
+{
+    <div class="alert alert-success mt-3">
+        <strong>Result:</strong> @ViewBag.Result
+    </div>
+}

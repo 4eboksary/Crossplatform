@@ -1,0 +1,14 @@
+﻿﻿
+form .btn-primary {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 1.1rem;
+}
+
+form .btn-primary {
+    border-radius: 5px;
+}
+
+form .form-group {
+    margin-bottom: 20px;
+}

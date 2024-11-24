@@ -1,0 +1,28 @@
+﻿﻿@{
+    ViewData["Title"] = "Lab 1";
+}
+
+<h1>Lab 1</h1>
+<p>Enter a string of up to 3 characters and get all possible permutations of those characters.</p>
+
+<form asp-action="Lab1Result" method="post">
+    <div class="form-group">
+        <label for="userInput">Enter symbols:</label>
+        <input type="text" id="userInput" name="userInput" class="form-control" required maxlength="3" />
+    </div>
+    <button type="submit" class="btn btn-primary mt-3">Submit</button>
+</form>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger mt-3">
+        <strong>Error:</strong> @ViewBag.Error
+    </div>
+}
+else if (ViewBag.Result != null)
+{
+    <div class="alert alert-success mt-3">
+        <strong>Result:</strong>
+        <pre>@ViewBag.Result</pre>
+    </div>
+}

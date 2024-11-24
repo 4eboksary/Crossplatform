@@ -1,0 +1,53 @@
+﻿﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to the Web Application</h1>
+    <br />
+    <p>
+        This project demonstrates the development of a web application using ASP.NET Core MVC. It consists of two main components:
+        a primary web application and a class library that provides the functionality for three practical tasks.
+    </p>
+    <p>
+        The application includes several key features:
+        <ul class="text-start mx-auto" style="max-width: 800px;">
+            <li>A <strong>welcome page</strong> with an overview of the project.</li>
+            <li>A <strong>login and registration system</strong>, along with a user profile page.</li>
+            <li>Three separate pages for each practical task, accessible only after successful user authorization.</li>
+        </ul>
+    </p>
+    <br />
+    <p>
+        On the registration page, users are required to provide the following details:
+    </p>
+    <ul class="text-start mx-auto" style="max-width: 800px;">
+        <li>A unique username (up to 50 characters).</li>
+        <li>Full name (up to 500 characters).</li>
+        <li>A password and its confirmation (meeting security requirements, including at least 1 digit, 1 special character, 1 uppercase letter, and a length of 8 to 16 characters).</li>
+        <li>A phone number in the Ukrainian format.</li>
+        <li>An email address conforming to the RFC 822 standard.</li>
+    </ul>
+    <p>
+        The profile page displays the registered user information but does not allow editing.
+    </p>
+    <br />
+    <p>
+        Authorization and authentication are implemented using a server that supports the OAuth2 protocol, such as IdentityServer4 or Okta,
+        ensuring secure access to application features. The project is designed for deployment on Linux (Ubuntu/Debian) using a virtual machine,
+        with all necessary deployment scripts and commands included in the repository.
+    </p>
+    <br />
+    <h3 class="mt-4">Lab Tasks</h3>
+    <p>
+        Each lab task focuses on a specific functionality:
+        <ul class="text-start mx-auto" style="max-width: 800px;">
+            <li><strong>Lab 1:</strong> Permutations of a string (up to 3 characters).</li>
+            <li><strong>Lab 2:</strong> Generating combinations based on user input.</li>
+            <li><strong>Lab 3:</strong> Advanced operations (to be determined).</li>
+        </ul>
+    </p>
+    <p>
+        Access to these features is granted only after user authentication.
+    </p>
+</div>

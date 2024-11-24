@@ -1,0 +1,126 @@
+﻿@model Lab5.Models.UsersLabModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<style>
+    .form-container {
+        max-width: 450px;
+        margin: 40px auto;
+        padding: 30px;
+        border: 1px solid #e0e0e0;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        background-color: #ffffff;
+    }
+
+    .form-header {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .form-header h2 {
+        color: #007bff;
+        font-size: 1.8em;
+        font-weight: 600;
+    }
+
+    .form-container div {
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        font-size: 1.1em;
+        font-weight: 500;
+        margin-bottom: 8px;
+        color: #555;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+        width: 100%;
+        padding: 12px;
+        font-size: 1em;
+        border: 1px solid #dcdcdc;
+        border-radius: 8px;
+        box-sizing: border-box;
+        transition: all 0.3s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="password"]:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 8px rgba(0, 123, 255, 0.25);
+        outline: none;
+    }
+
+    .error-message {
+        color: #e74c3c;
+        font-size: 0.9em;
+        margin-top: 5px;
+    }
+
+    button[type="submit"] {
+        width: 100%;
+        padding: 12px;
+        font-size: 1.2em;
+        color: #fff;
+        background-color: #28a745;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    button[type="submit"]:hover {
+        background-color: #218838;
+        transform: translateY(-2px);
+    }
+
+    button[type="submit"]:active {
+        transform: translateY(0);
+    }
+
+</style>
+
+<div class="form-container">
+    <div class="form-header">
+        <h2>Create Your Account</h2>
+    </div>
+    <form asp-action="Register" method="post">
+        <div>
+            <label asp-for="Username">Username</label>
+            <input asp-for="Username" />
+            <span asp-validation-for="Username" class="error-message"></span>
+        </div>
+        <div>
+            <label asp-for="FullName">Full Name</label>
+            <input asp-for="FullName" />
+            <span asp-validation-for="FullName" class="error-message"></span>
+        </div>
+        <div>
+            <label asp-for="Email">Email</label>
+            <input asp-for="Email" />
+            <span asp-validation-for="Email" class="error-message"></span>
+        </div>
+        <div>
+            <label asp-for="PhoneNumber">Phone Number</label>
+            <input asp-for="PhoneNumber" />
+            <span asp-validation-for="PhoneNumber" class="error-message"></span>
+        </div>
+        <div>
+            <label asp-for="Password">Password</label>
+            <input asp-for="Password" type="password" />
+            <span asp-validation-for="Password" class="error-message"></span>
+        </div>
+        <div>
+            <label asp-for="ConfirmPassword">Confirm Password</label>
+            <input asp-for="ConfirmPassword" type="password" />
+            <span asp-validation-for="ConfirmPassword" class="error-message"></span>
+        </div>
+        <button type="submit">Register</button>
+    </form>
+</div>
